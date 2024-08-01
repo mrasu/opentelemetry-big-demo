@@ -102,6 +102,10 @@ exporters:
     endpoint: "http://prometheus:9090/api/v1/otlp"
     tls:
       insecure: true
+  otlphttp/openobserve:
+    endpoint: http://openobserve-main:5080/api/default
+    headers:
+      Authorization: Basic ${env:OPENOBSERVE_BASIC_AUTH}
   opensearch:
     logs_index: otel
     http:
@@ -128,16 +132,16 @@ service:
     traces:
       receivers: [otlp]
       processors: [transform, batch]
-      # exporters: [otlp, debug, spanmetrics]
-      exporters: [otlp/jaeger, debug, spanmetrics, otlp/signoz]
+      # exporters: [debug, spanmetrics]
+      exporters: [otlp/jaeger, debug, spanmetrics, otlp/signoz, otlphttp/openobserve]
     metrics:
       receivers: [hostmetrics, docker_stats, httpcheck/frontendproxy, otlp, prometheus, redis, spanmetrics]
       # receivers: [hostmetrics, docker_stats]
       processors: [batch]
-      # exporters: [otlphttp/prometheus, debug]
-      exporters: [otlphttp/prometheus, debug, otlp/signoz]
+      # exporters: [debug]
+      exporters: [otlphttp/prometheus, debug, otlp/signoz, otlphttp/openobserve]
     logs:
       receivers: [otlp]
       processors: [batch]
-      # exporters: [opensearch, debug]
-      exporters: [debug, otlp/signoz]
+      # exporters: [debug]
+      exporters: [debug, otlp/signoz, otlphttp/openobserve]
