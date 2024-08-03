@@ -2,6 +2,10 @@
 
 Compare OpenTelemetry tools here
 
+# How it works
+
+![how it works](./docs/image/how-it-works.png)
+
 # How to use
 
 ```shell
