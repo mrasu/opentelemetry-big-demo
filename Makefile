@@ -1,16 +1,23 @@
 PWD := $(shell pwd)
 DEV_DETACH ?= true
+DEV_LOAD ?= true
 
 ifeq ($(DEV_DETACH),true)
-	DETACHCMD = --detach
+	DETACH_CMD=--detach
 else
-	DETACHCMD=
+	DETACH_CMD=
+endif
+
+ifeq ($(DEV_LOAD),true)
+	LOAD_CMD=-f docker-compose-loadgenerator.yml
+else
+	LOAD_CMD=
 endif
 
 DOCKER_COMPOSE_ENV=--env-file ./opentelemetry-demo/.env --env-file .env
 
-COMPOSE_CMD=docker compose --project-directory $(PWD)/opentelemetry-demo --env-file ./opentelemetry-demo/.env --env-file .env -f docker-compose.yml
-COMPOSE_UP_CMD=up --force-recreate --remove-orphans $(DETACHCMD)
+COMPOSE_CMD=docker compose --project-directory $(PWD)/opentelemetry-demo --env-file ./opentelemetry-demo/.env --env-file .env -f docker-compose.yml $(LOAD_CMD)
+COMPOSE_UP_CMD=up --force-recreate --remove-orphans $(DETACH_CMD)
 
 .PHONY: start-all
 start-all:
