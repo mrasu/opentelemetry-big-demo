@@ -1,20 +1,22 @@
-define create_otelcol_set_envs
-$(1) := OTEL_COLLECTOR_SET_TRACES="--set=service::pipelines::traces::exporters=[debug, spanmetrics, $(2)]" \
-	OTEL_COLLECTOR_SET_METRICS="--set=service::pipelines::metrics::exporters=[debug, $(2)]" \
-	OTEL_COLLECTOR_SET_LOGS="--set=service::pipelines::logs::exporters=[debug, otlphttp/openobserve]"
-endef
-
 PWD := $(shell pwd)
+DEV_DETACH ?= true
+
+ifeq ($(DEV_DETACH),true)
+	DETACHCMD = --detach
+else
+	DETACHCMD=
+endif
+
 DOCKER_COMPOSE_ENV=--env-file ./opentelemetry-demo/.env --env-file .env
 
 COMPOSE_CMD=docker compose --project-directory $(PWD)/opentelemetry-demo --env-file ./opentelemetry-demo/.env --env-file .env -f docker-compose.yml
-COMPOSE_UP_CMD=up --force-recreate --remove-orphans --detach
+COMPOSE_UP_CMD=up --force-recreate --remove-orphans $(DETACHCMD)
 
 .PHONY: start-all
 start-all:
 	$(COMPOSE_CMD) \
-		-f projects/signoz/docker-compose.yml \
-		-f projects/openobserve/docker-compose.yml \
+		-f backends/signoz/docker-compose.yml \
+		-f backends/openobserve/docker-compose.yml \
 		$(COMPOSE_UP_CMD)
 	@echo ""
 	@echo "OpenTelemetry Big Demo is running."
@@ -26,9 +28,9 @@ start-all:
 
 .PHONY: start-signoz
 start-signoz:
-	$(eval $(call create_otelcol_set_envs,OTEL_COLLECTOR_SETS,otlp/signoz))
-	$(OTEL_COLLECTOR_SETS) $(COMPOSE_CMD) \
-		-f projects/signoz/docker-compose.yml \
+	OTEL_COLLECTOR_CONFIG_EXTRAS=../backends/signoz/otelcol-config-extras.yml \
+		$(COMPOSE_CMD) \
+		-f backends/signoz/docker-compose.yml \
 		$(COMPOSE_UP_CMD)
 	@echo ""
 	@echo "OpenTelemetry Big Demo is running."
@@ -39,9 +41,9 @@ start-signoz:
 
 .PHONY: start-openobserve
 start-openobserve:
-	$(eval $(call create_otelcol_set_envs,OTEL_COLLECTOR_SETS,otlphttp/openobserve))
-	$(OTEL_COLLECTOR_SETS) $(COMPOSE_CMD) \
-		-f projects/openobserve/docker-compose.yml \
+	OTEL_COLLECTOR_CONFIG_EXTRAS=../backends/openobserve/otelcol-config-extras.yml \
+		$(COMPOSE_CMD) \
+		-f backends/openobserve/docker-compose.yml \
 		$(COMPOSE_UP_CMD)
 	@echo ""
 	@echo "OpenTelemetry Big Demo is running."

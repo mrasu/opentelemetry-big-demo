@@ -132,16 +132,12 @@ service:
     traces:
       receivers: [otlp]
       processors: [transform, batch]
-      # exporters: [debug, spanmetrics]
       exporters: [otlp/jaeger, debug, spanmetrics, otlp/signoz, otlphttp/openobserve]
     metrics:
       receivers: [hostmetrics, docker_stats, httpcheck/frontendproxy, otlp, prometheus, redis, spanmetrics]
-      # receivers: [hostmetrics, docker_stats]
       processors: [batch]
-      # exporters: [debug]
       exporters: [otlphttp/prometheus, debug, otlp/signoz, otlphttp/openobserve]
     logs:
       receivers: [otlp]
       processors: [batch]
-      # exporters: [debug]
       exporters: [debug, otlp/signoz, otlphttp/openobserve]

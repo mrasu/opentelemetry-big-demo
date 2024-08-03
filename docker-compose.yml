@@ -559,9 +559,9 @@ services:
     command:
       - "--config=/etc/otelcol-config.yml"
       - "--config=/etc/otelcol-config-extras.yml"
-      - "${OTEL_COLLECTOR_SET_TRACES}"
-      - "${OTEL_COLLECTOR_SET_METRICS}"
-      - "${OTEL_COLLECTOR_SET_LOGS}"
+      # - "${OTEL_COLLECTOR_SET_TRACES}"
+      # - "${OTEL_COLLECTOR_SET_METRICS}"
+      # - "${OTEL_COLLECTOR_SET_LOGS}"
     user: 0:0
     volumes:
       - ${HOST_FILESYSTEM}:/hostfs:ro

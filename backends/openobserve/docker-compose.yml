@@ -2,10 +2,10 @@ services:
   openobserve-main:
     image: public.ecr.aws/zinclabs/openobserve:v0.10.8
     volumes:
-      - ../projects/data/openobserve/data:/data
+      - ../backends/data/openobserve/data:/data
     ports:
       - "${OPENOBSERVE_PORT}:5080"
     environment:
       - ZO_DATA_DIR=/data
-      - ZO_ROOT_USER_EMAIL=root@example.com
-      - ZO_ROOT_USER_PASSWORD=root
+      - ZO_ROOT_USER_EMAIL=${OPENOBSERVE_USER_EMAIL}
+      - ZO_ROOT_USER_PASSWORD=${OPENOBSERVE_PASSWORD}
