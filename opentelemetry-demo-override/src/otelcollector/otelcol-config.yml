@@ -98,6 +98,10 @@ exporters:
     endpoint: "signoz-otel-collector:4317"
     tls:
       insecure: true
+  otlp/grafana_tempo:
+    endpoint: "grafana-tempo:4317"
+    tls:
+      insecure: true
   otlphttp/prometheus:
     endpoint: "http://prometheus:9090/api/v1/otlp"
     tls:
@@ -106,6 +110,8 @@ exporters:
     endpoint: http://openobserve-main:5080/api/default
     headers:
       Authorization: Basic ${env:OPENOBSERVE_BASIC_AUTH}
+  otlphttp/loki:
+    endpoint: http://grafana-loki:3100/otlp
   opensearch:
     logs_index: otel
     http:
@@ -132,7 +138,7 @@ service:
     traces:
       receivers: [otlp]
       processors: [transform, batch]
-      exporters: [otlp/jaeger, debug, spanmetrics, otlp/signoz, otlphttp/openobserve]
+      exporters: [otlp/jaeger, debug, spanmetrics, otlp/signoz, otlphttp/openobserve, otlp/grafana_tempo]
     metrics:
       receivers: [hostmetrics, docker_stats, httpcheck/frontendproxy, otlp, prometheus, redis, spanmetrics]
       processors: [batch]
@@ -140,4 +146,4 @@ service:
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [debug, otlp/signoz, otlphttp/openobserve]
+      exporters: [debug, otlp/signoz, otlphttp/openobserve, otlphttp/loki]
