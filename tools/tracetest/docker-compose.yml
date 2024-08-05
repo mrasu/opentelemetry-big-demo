@@ -1,0 +1,51 @@
+services:
+  # tracetest-applier is to add all testsuites to tracetest's server
+  tracetest-applier:
+    image: ${TRACETEST_IMAGE}
+    volumes:
+      - ./test/tracetesting:/app/test/tracetesting
+      - ./pb:/app/pb
+      - ../tools/tracetest/apply.sh:/app/apply.sh
+      - ../tools/tracetest/tracetest-vars.yaml:/app/tracetest-vars.yaml
+    entrypoint: sh /app/apply.sh
+    depends_on:
+      tracetest-server:
+        condition: service_healthy
+
+  tracetest-server:
+    image: ${TRACETEST_IMAGE}
+    volumes:
+      - type: bind
+        source: ../tools/tracetest/tracetest-config.yaml
+        target: /app/tracetest.yaml
+      - type: bind
+        source: ./test/tracetesting/tracetest-provision.yaml
+        target: /app/provision.yaml
+    command: --provisioning-file /app/provision.yaml
+    ports:
+      - "${TRACETEST_PORT}:11633"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      tracetest-postgres:
+        condition: service_healthy
+      otelcol:
+        condition: service_started
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "localhost:11633" ]
+      interval: 1s
+      timeout: 3s
+      retries: 60
+
+  tracetest-postgres:
+    image: ${POSTGRES_IMAGE}
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    healthcheck:
+      test: pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"
+      interval: 1s
+      timeout: 5s
+      retries: 60
+    # ports:
+    #   - 5432

@@ -1,0 +1,27 @@
+type: VariableSet
+spec:
+  id: tracetesting-vars
+  name: tracetesting-vars
+  values:
+    - key: AD_SERVICE_ADDR
+      value: adservice:9555
+    - key: CART_SERVICE_ADDR
+      value: cartservice:7070
+    - key: CHECKOUT_SERVICE_ADDR
+      value: checkoutservice:5050
+    - key: CURRENCY_SERVICE_ADDR
+      value: currencyservice:7001
+    - key: EMAIL_SERVICE_ADDR
+      value: http://emailservice:6060
+    - key: FRONTEND_ADDR
+      value: frontend:8080
+    - key: PAYMENT_SERVICE_ADDR
+      value: paymentservice:50051
+    - key: PRODUCT_CATALOG_SERVICE_ADDR
+      value: productcatalogservice:3550
+    - key: RECOMMENDATION_SERVICE_ADDR
+      value: recommendationservice:9001
+    - key: SHIPPING_SERVICE_ADDR
+      value: shippingservice:50050
+    - key: KAFKA_SERVICE_ADDR
+      value: kafka:9092

@@ -25,6 +25,7 @@ start-all:
 		-f backends/signoz/docker-compose.yml \
 		-f backends/openobserve/docker-compose.yml \
 		-f backends/grafana/docker-compose.yml \
+		-f tools/tracetest/docker-compose.yml \
 		$(COMPOSE_UP_CMD)
 	@echo ""
 	@echo "OpenTelemetry Big Demo is running."
@@ -34,6 +35,7 @@ start-all:
 	@echo "Go to http://localhost:10001 for the SigNoz UI."
 	@echo "Go to http://localhost:10002 for the OpenObserve UI."
 	@echo "Go to http://localhost:10003 for the Grafana UI."
+	@echo "Go to http://localhost:10004 for the Tracetest UI."
 
 .PHONY: start-signoz
 start-signoz:
@@ -61,7 +63,6 @@ start-openobserve:
 	@echo "Go to http://localhost:9090 for the Prometheus UI."
 	@echo "Go to http://localhost:10002 for the OpenObserve UI."
 
-
 .PHONY: start-grafana
 start-grafana:
 	OTEL_COLLECTOR_CONFIG_EXTRAS=../backends/grafana/otelcol-config-extras.yml \
@@ -74,6 +75,20 @@ start-grafana:
 	@echo "Go to http://localhost:8080/jaeger/ui for the Jaeger UI."
 	@echo "Go to http://localhost:9090 for the Prometheus UI."
 	@echo "Go to http://localhost:10003 for the Grafana UI."
+
+
+.PHONY: start-tracetest
+start-tracetest:
+	OTEL_COLLECTOR_CONFIG_EXTRAS=../tools/tracetest/otelcol-config-extras.yml \
+		$(COMPOSE_CMD) \
+		-f tools/tracetest/docker-compose.yml \
+		$(COMPOSE_UP_CMD)
+	@echo ""
+	@echo "OpenTelemetry Big Demo is running."
+	@echo "Go to http://localhost:8080 for the demo UI."
+	@echo "Go to http://localhost:8080/jaeger/ui for the Jaeger UI."
+	@echo "Go to http://localhost:9090 for the Prometheus UI."
+	@echo "Go to http://localhost:10004 for the Tracetest UI."
 
 .PHONY: stop
 stop:

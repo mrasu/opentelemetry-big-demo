@@ -24,4 +24,5 @@ When you want to run a specific tool, you can use `make start-xxx`, e.g. `make s
 - [x] [SigNoz](https://signoz.io/) at http://localhost:10001 (need to create an account first)
 - [x] [OpenObserve](https://openobserve.ai/) at http://localhost:10002 (email=root@example.com, password=root)
 - [x] [Grafana stack](https://grafana.com/) at http://localhost:1003
+- [x] [Tracetest](https://tracetest.io/) at http://localhost:1004
 - [ ] and more...

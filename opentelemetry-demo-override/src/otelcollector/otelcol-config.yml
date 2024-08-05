@@ -102,6 +102,10 @@ exporters:
     endpoint: "grafana-tempo:4317"
     tls:
       insecure: true
+  otlp/tracetest:
+    endpoint: http://tracetest-server:4317
+    tls:
+      insecure: true
   otlphttp/prometheus:
     endpoint: "http://prometheus:9090/api/v1/otlp"
     tls:
@@ -138,7 +142,7 @@ service:
     traces:
       receivers: [otlp]
       processors: [transform, batch]
-      exporters: [otlp/jaeger, debug, spanmetrics, otlp/signoz, otlphttp/openobserve, otlp/grafana_tempo]
+      exporters: [otlp/jaeger, debug, spanmetrics, otlp/signoz, otlphttp/openobserve, otlp/grafana_tempo, otlp/tracetest]
     metrics:
       receivers: [hostmetrics, docker_stats, httpcheck/frontendproxy, otlp, prometheus, redis, spanmetrics]
       processors: [batch]
