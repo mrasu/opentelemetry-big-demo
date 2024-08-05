@@ -99,5 +99,3 @@ stop:
 .PHONY: clean
 clean:
 	sudo rm -rf backends/data
-	# Tempo requires its directory to be owned by user 10001
-	mkdir -p backends/data/grafana/tempo-data/ && touch backends/data/grafana/tempo-data/.git-keep && sudo chown 10001:10001 backends/data/grafana/tempo-data/
