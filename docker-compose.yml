@@ -583,6 +583,7 @@ services:
       - OTEL_COLLECTOR_PORT_GRPC
       - OTEL_COLLECTOR_PORT_HTTP
       - OPENOBSERVE_BASIC_AUTH
+      - EXPERIMENTAL_DOCKER_DESKTOP_FORCE_QEMU=1
 
   # Prometheus
   prometheus:
